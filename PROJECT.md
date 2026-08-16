@@ -1,45 +1,44 @@
 # Stack of Napkins — Project Context
 
 ## What it is
-AI agency that builds and deploys custom agents for professional services businesses (law firms, medical practices, real estate, etc.). Positioned as "custom AI employees", not consulting or automation tools.
+An AI product for solo founders and solopreneurs — "a team of one, running
+like ten." Built on the QM agent harness, it gives one person a crew of
+agents (inbox, social, content, support, data, docs) that draft and act
+under an approval-first trust dial. Positioned as augment-not-replace:
+owned, on your own stack, no lock-in.
 
 ## Status
-Site live at stackofnapkins.com. Pre-launch — no clients yet.
+Pre-launch. Marketing site + waitlist live; product in build.
 
 ## Stack
-Static HTML, Supabase, Resend, Vercel, Supabase Edge Functions (Deno)
+Static HTML, Supabase (REST + RLS), Vercel (`cleanUrls`).
 
 ## Pages
-- `light.html` — homepage
-- `work.html` — case studies + industry use cases (6 verticals)
-- `contact.html` — contact form (wired to Supabase + email flows)
-- `services.html`, `process.html`, `about.html` — supporting pages
-- `case-dental.html`, `case-law.html` — individual case study pages
+- `index.html` — homepage (hero, the crew, industry verticals)
+- `pricing.html` — three flat tiers (Starter $29 / Pro $99 / Scale $299)
+- `signin.html` — pre-launch waitlist join form
 
-## Credentials
-See `/Users/tp/projects/stack-of-napkins/.env.local`
+Internal navigation uses extensionless routes (`/pricing`, `/signin`) via
+`vercel.json` `cleanUrls`.
+
+## Waitlist flow
+1. Visitor submits the email field on `signin.html`
+2. POST to Supabase REST API → INSERT into `public.waitlist`
+3. RLS: public (anon) INSERT only; no read-back. Duplicate emails are
+   rejected by a case-insensitive unique index (client treats 409 as success)
+
+Migration: `supabase/migrations/20260816_waitlist.sql`
 
 ## Domains & Services
-- Domain: stackofnapkins.com (GoDaddy)
-- Email: hello@stackofnapkins.com (Google Workspace + Resend verified)
-- Office: 625 Broad St Suite 240, Newark NJ 07102
-- Supabase: https://hqnhovkfofbxfqtftewa.supabase.co
-  - RLS enabled: inserts public, reads blocked
-  - pg_net trigger on contact_submissions → fires Edge Function on INSERT
-- Edge Function: `notify-contact` — deployed, sends internal notification + confirmation email via Resend
+- Domain: stackofnapkins.com
+- Supabase: https://hqnhovkfofbxfqtftewa.supabase.co (RLS enabled)
 - Deployed: Vercel (auto-deploy from main)
 
-## Email Flow (contact form)
-1. User submits contact.html → POST to Supabase REST API
-2. Supabase INSERT triggers `on_contact_submission` (pg_net)
-3. pg_net calls Edge Function `notify-contact`
-4. Edge Function sends two emails via Resend:
-   - Internal: to hello@stackofnapkins.com (full submission details)
-   - Confirmation: to submitter (dark-theme branded email, dry wit voice)
-
-## Open
-- First client (MIN-108)
-- Twilio SMS setup (MIN-111)
-- Google Business API access (MIN-112)
-- Guardian security product pages (MIN-113, MIN-114)
-- Playbook doc (MIN-116)
+## Notes
+- The previous "AI agency for professional services" brand and its contact
+  form / email pipeline (Resend, `notify-contact` edge function,
+  `contact_submissions` trigger) have been retired. If the
+  `contact_submissions` table, `on_contact_submission` trigger,
+  `notify_contact_email()` function, or `notify-contact` edge function
+  still exist on the live Supabase project, drop/undeploy them there —
+  removing the repo files does not touch the live database.
