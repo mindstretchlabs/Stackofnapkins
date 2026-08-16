@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stack of Napkins — Join the list</title>
+<meta name="description" content="Join the Stack of Napkins waitlist.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%231A1712' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='50' cy='42' r='19'/%3E%3Cpath d='M43 64h14M45 71h10'/%3E%3C/g%3E%3C/svg%3E">
+</head>
+<body>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ground:#FBFAF7;--ground-2:#F1ECE3;--card:#FFFFFF;
+    --ink:#1A1712;--muted:#857B70;--line:#E4DED4;
+    --accent:#3A3632;--accent-soft:rgba(58,54,50,.07);
+    --ticker-bg:#1A1712;--ticker-fg:#EDE7DD;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+  }
+  html,body{min-height:100%}
+  body{background:var(--ground);color:var(--ink);font-family:var(--serif);line-height:1.5;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;min-height:100vh}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.045;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .z{position:relative;z-index:2}
+
+  .ticker{background:var(--ticker-bg);color:var(--ticker-fg);font-family:var(--mono);font-size:.74rem;padding:.7rem 1.4rem;min-height:2.2rem;display:flex;align-items:center;gap:.6rem}
+  .ticker .caret{opacity:.6}
+  .ticker .line{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.05rem clamp(1.2rem,5vw,2.2rem);border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:.5rem}
+  .brand .m{width:24px;height:24px;flex:none}
+  .wordmark{font-size:1.08rem;font-weight:600;letter-spacing:-.01em}
+  .chip{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--ground);padding:.5rem .9rem;border-radius:3px;text-decoration:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:clamp(2rem,8vw,4rem) 1.4rem}
+  .cardf{width:100%;max-width:26rem;display:flex;flex-direction:column;align-items:stretch;text-align:center}
+  .mk{width:52px;height:52px;margin:0 auto 1.3rem;display:block}
+  h1{font-size:clamp(2rem,6vw,2.6rem);line-height:1.04;letter-spacing:-.02em;font-weight:600;text-wrap:balance}
+  .subm{color:var(--muted);font-style:italic;margin-top:.5rem;font-size:1.05rem}
+  .stack{display:flex;flex-direction:column;gap:.9rem;margin-top:2rem}
+
+  .btn{font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;padding:.95rem 1rem;border-radius:4px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:transform .14s ease,border-color .14s ease}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .btn.google{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+  .btn.google:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .btn.solid{background:var(--ink);color:var(--ground);border:1px solid var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+  .btn.solid:hover{transform:translateY(-1px)}
+  .g{width:16px;height:16px}
+  .fine{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);line-height:1.7;margin-top:.2rem}
+  .fine a{color:var(--muted);text-underline-offset:2px}.fine a:hover{color:var(--accent)}
+  .or{display:flex;align-items:center;gap:1rem;color:var(--muted);font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;margin:.4rem 0}
+  .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+  .field{text-align:left;display:flex;flex-direction:column;gap:.45rem}
+  .field label{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .field input{font-family:var(--serif);font-size:1.05rem;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:4px;padding:.85rem .95rem;width:100%}
+  .field input::placeholder{color:var(--muted);opacity:.75}
+  .field input:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .swap{margin-top:1.6rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .swap button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:none;border:none;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:0}
+
+  footer{border-top:1px solid var(--line);padding:1.4rem clamp(1.2rem,5vw,2.2rem);display:flex;align-items:center;justify-content:flex-end;gap:1rem}
+  .fnote{font-style:italic;color:var(--muted);font-size:.92rem}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="pencil" x="-15%" y="-15%" width="130%" height="130%"><feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="4" seed="6" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="1.6"/></filter>
+  <symbol id="mark" viewBox="0 0 100 100"><g filter="url(#pencil)" fill="none" stroke="var(--ink)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 30 Q30 28 32 28 L62 28 L72 38 L72 70 Q72 72 70 72 L32 72 Q30 72 30 70 Z" stroke-width="2.6"/>
+    <path d="M62 28 L62 38 L72 38" stroke-width="2" opacity=".9"/>
+    <path d="M47 58.4 C43.3 56.2 39.6 53.2 39.6 48.8 C39.6 42.9 44.1 39.2 50 39.2 C55.9 39.2 60.4 42.9 60.4 48.8 C60.4 53.2 56.7 56.2 53 58.4 Z" stroke-width="2.4"/>
+    <path d="M47 58.4 L47.4 62.1 Q47.4 62.8 48.2 62.8 L51.9 62.8 Q52.6 62.8 52.6 62.1 L53 58.4" stroke-width="1.9"/>
+    <path d="M47.6 60.3 L52.4 60.3" stroke-width="1.4" opacity=".85"/>
+    <path d="M50 36.9 L50 34.7 M41.9 42.1 L40 40.3 M58.1 42.1 L60 40.3 M38.2 48.8 L35.9 48.8 M61.8 48.8 L64.1 48.8" stroke-width="1.6" opacity=".72"/>
+  </g></symbol>
+</defs></svg>
+
+<div class="ticker z" aria-hidden="true"><span class="caret">&gt;</span><span class="line" id="tick">Ready when you are.</span></div>
+
+<header class="z">
+  <a class="brand" href="/" style="text-decoration:none;color:inherit"><span class="m"><svg viewBox="0 0 100 100"><use href="#mark"/></svg></span><span class="wordmark">Stack&nbsp;of&nbsp;Napkins</span></a>
+  <a class="chip" href="/pricing">Pricing</a>
+</header>
+
+<main class="z">
+  <form class="cardf" id="waitForm" novalidate>
+    <span class="mk"><svg viewBox="0 0 100 100"><use href="#mark"/></svg></span>
+    <h1 id="head">Join the list.</h1>
+    <p class="subm" id="sub">We're opening the doors soon. Leave your email and you'll be first in line — with founding-member pricing.</p>
+
+    <div class="stack">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="your@email.com" required/>
+      </div>
+      <button class="btn solid" type="submit" id="emailBtn">Save my seat</button>
+      <p class="fine" id="note">One email when your seat is ready. No spam, ever.</p>
+    </div>
+
+    <p class="swap" id="swap">A team of one, running like ten.</p>
+  </form>
+</main>
+
+<footer class="z"><span class="fnote">Started on a napkin.</span></footer>
+
+<script>
+  (function(){
+    var SUPABASE_URL="https://hqnhovkfofbxfqtftewa.supabase.co";
+    var SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhvdmtmb2ZieGZxdGZ0ZXdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5Njc0NTAsImV4cCI6MjA4OTU0MzQ1MH0.zXq1PTQyiJOS0rpOcTM7lttdwzH2StsEBlPkDULqAoQ";
+
+    var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var lines=["Grabbing a fresh napkin…","Sharpening the pencils…","Ready when you are."];
+    var tick=document.getElementById("tick"),i=0;
+    if(!reduced)setInterval(function(){i=(i+1)%lines.length;tick.textContent=lines[i];},2600);
+
+    var form=document.getElementById("waitForm"),
+        input=document.getElementById("email"),
+        eb=document.getElementById("emailBtn"),
+        head=document.getElementById("head"),
+        sub=document.getElementById("sub"),
+        note=document.getElementById("note"),
+        swap=document.getElementById("swap"),
+        stack=document.querySelector(".stack"),
+        done=false;
+
+    function valid(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
+
+    form.addEventListener("submit",function(e){
+      e.preventDefault();
+      if(done)return;
+      var v=input.value.trim();
+      if(!valid(v)){input.focus();note.textContent="That email looks off — mind checking it?";return;}
+      eb.disabled=true;eb.textContent="Saving your seat…";note.textContent="One email when your seat is ready. No spam, ever.";
+      fetch(SUPABASE_URL+"/rest/v1/waitlist",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Prefer":"return=minimal"},
+        body:JSON.stringify({email:v,source:"signin"})
+      }).then(function(r){
+        // 201 = added, 409 = already on the list — both are a win for the visitor.
+        if(!r.ok && r.status!==409)throw new Error("bad status "+r.status);
+        done=true;
+        var back=r.status===409;
+        head.textContent=back?"You're already in.":"You're on the list.";
+        sub.textContent="We'll send one email the moment your seat is ready. Talk soon.";
+        stack.innerHTML='<p class="fine" style="text-align:center;font-size:.9rem;letter-spacing:.14em">Saved ✓</p>';
+        swap.textContent="A team of one, running like ten.";
+      }).catch(function(){
+        eb.disabled=false;eb.textContent="Save my seat";
+        note.textContent="Something hiccuped on our end — give it another go?";
+      });
+    });
+  })();
+</script>
+</body>
+</html>
